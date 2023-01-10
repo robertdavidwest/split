@@ -1,7 +1,7 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '../../app/store';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../../app/store";
 
 const Navbar = () => {
   const isLoggedIn = useSelector((state) => !!state.auth.me.id);
@@ -9,12 +9,12 @@ const Navbar = () => {
   const navigate = useNavigate();
   const logoutAndRedirectHome = () => {
     dispatch(logout());
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
     <div>
-      <h1>FS-App-Template</h1>
+      <h1>Split</h1>
       <nav>
         {isLoggedIn ? (
           <div>
