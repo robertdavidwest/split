@@ -20,8 +20,8 @@ const Audio = ({ song, section }) => {
     AUDIO.src = src;
   }
 
-  function play() {
-    AUDIO.play();
+  async function play() {
+    await AUDIO.play();
     setIsPlaying(true);
   }
 
@@ -30,7 +30,7 @@ const Audio = ({ song, section }) => {
     setIsPlaying(false);
   }
 
-  function handleSectionEnd() {
+  function handleSectionEnd(loop) {
     // if section end defined treat it like end of song
     if (AUDIO.currentTime > section.end) {
       addSrc();
@@ -43,28 +43,35 @@ const Audio = ({ song, section }) => {
     }
   }
 
-  function handleSongEnd() {
+  async function handleSongEnd(loop) {
     if (loop) {
       AUDIO.load();
-      play();
+      await play();
     } else {
       pause();
       addSrc();
     }
   }
 
-  function setSongEndEvtListeners() {
+  function removeSongEndEvtListener(loop) {
     if (section.end) {
-      AUDIO.addEventListener("pause", handleSectionEnd);
+      AUDIO.removeEventListener("pause", () => handleSectionEnd(loop));
     } else {
-      AUDIO.addEventListener("ended", handleSongEnd);
+      AUDIO.removeEventListener("ended", () => handleSongEnd(loop));
+    }
+  }
+
+  function setSongEndEvtListener(loop) {
+    if (section.end) {
+      AUDIO.addEventListener("pause", () => handleSectionEnd(loop));
+    } else {
+      AUDIO.addEventListener("ended", () => handleSongEnd(loop));
     }
   }
 
   function load() {
     addSrc();
     AUDIO.load();
-    setSongEndEvtListeners();
     setLoaded(true);
   }
 
@@ -94,8 +101,10 @@ const Audio = ({ song, section }) => {
   const toggleLoop = () => {
     setLoop(!loop);
   };
+
   useEffect(() => {
-    setSongEndEvtListeners();
+    removeSongEndEvtListener(!loop);
+    setSongEndEvtListener(loop);
   }, [loop]);
 
   return (

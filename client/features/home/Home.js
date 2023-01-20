@@ -19,6 +19,7 @@ const Home = (props) => {
     units: "seconds",
   };
 
+  if (!section.start) section["start"] = null;
   if (!section.end) section["end"] = null;
 
   return (
