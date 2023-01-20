@@ -19,3 +19,24 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+#player-controls {
+  background-color: #333;
+  box-shadow: 0px -2px 2px #5a5a5a;
+  height: 100%;
+}
+
+#player-controls > div {
+  cursor: pointer;
+  height: 100%;
+  align-items: center;
+}
+
+#player-controls i {
+  font-size: 2em;
+  padding: 0 0.5em;
+}
+
+#player-controls i:nth-child(2) {
+  font-size: 3em;
+}
