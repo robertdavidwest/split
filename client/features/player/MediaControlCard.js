@@ -16,7 +16,7 @@ import LoopIcon from "@mui/icons-material/Loop";
 
 export default function MediaControlCard({
   restart,
-  playPause,
+  loadPlayPause,
   isPlaying,
   loop,
   toggleLoop,
@@ -36,7 +36,7 @@ export default function MediaControlCard({
           <IconButton aria-label="restart" onClick={restart}>
             <RestartAltIcon />
           </IconButton>
-          <IconButton aria-label="play/pause" onClick={playPause}>
+          <IconButton aria-label="play/pause" onClick={loadPlayPause}>
             {isPlaying ? (
               <PauseIcon sx={{ height: 38, width: 38 }} />
             ) : (

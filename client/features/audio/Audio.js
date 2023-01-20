@@ -4,12 +4,12 @@ import Player from "../player/Player";
 const AUDIO = document.createElement("audio");
 
 const Audio = ({ song, section }) => {
-  const [currentSong, setCurrentSong] = useState({});
+  const [loaded, setLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loop, setLoop] = useState(false);
   // const [playBackRate, setPlayBackRate] = useState(1.0);
 
-  function addSrc(song, section) {
+  function addSrc() {
     let src = song.audioUrl;
     if (section.start) {
       src += `#t=${section.start}`;
@@ -33,7 +33,7 @@ const Audio = ({ song, section }) => {
   function handleSectionEnd() {
     // if section end defined treat it like end of song
     if (AUDIO.currentTime > section.end) {
-      addSrc(song, section);
+      addSrc();
       AUDIO.load();
       if (loop) {
         play();
@@ -49,7 +49,7 @@ const Audio = ({ song, section }) => {
       play();
     } else {
       pause();
-      addSrc(song, section);
+      addSrc();
     }
   }
 
@@ -61,32 +61,32 @@ const Audio = ({ song, section }) => {
     }
   }
 
-  function load(currentSong) {
-    addSrc(song, section);
+  function load() {
+    addSrc();
     AUDIO.load();
     setSongEndEvtListeners();
-    setCurrentSong(currentSong);
+    setLoaded(true);
   }
 
   function changeSpeed(speed) {
     AUDIO.playbackRate = speed;
   }
 
-  function startSong(song) {
+  function startSong() {
     pause();
-    load(song);
+    load();
     play();
   }
 
-  function toggleOne(selectedSong) {
-    if (selectedSong.id !== currentSong.id) {
-      startSong(selectedSong);
+  function loadPlayPause() {
+    if (loaded) {
+      playPauseToggle();
     } else {
-      toggle();
+      startSong();
     }
   }
 
-  function toggle() {
+  function playPauseToggle() {
     if (isPlaying) pause();
     else play();
   }
@@ -105,8 +105,7 @@ const Audio = ({ song, section }) => {
       setIsPlaying={setIsPlaying}
       loop={loop}
       setLoop={setLoop}
-      toggleOne={toggleOne}
-      toggle={toggle}
+      loadPlayPause={loadPlayPause}
     />
   );
 };
