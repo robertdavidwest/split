@@ -91,6 +91,9 @@ const Audio = ({ song, section }) => {
     else play();
   }
 
+  const toggleLoop = () => {
+    setLoop(!loop);
+  };
   useEffect(() => {
     setSongEndEvtListeners();
   }, [loop]);
@@ -102,10 +105,9 @@ const Audio = ({ song, section }) => {
       changeSpeed={changeSpeed}
       startSong={startSong}
       isPlaying={isPlaying}
-      setIsPlaying={setIsPlaying}
-      loop={loop}
-      setLoop={setLoop}
       loadPlayPause={loadPlayPause}
+      loop={loop}
+      toggleLoop={toggleLoop}
     />
   );
 };

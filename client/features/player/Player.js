@@ -9,20 +9,10 @@ const Player = (props) => {
     changeSpeed,
     startSong,
     isPlaying,
-    setIsPlaying,
     loop,
-    setLoop,
+    toggleLoop,
     loadPlayPause,
   } = props;
-
-  const toggleLoop = () => {
-    setLoop(!loop);
-  };
-
-  const restart = () => {
-    setIsPlaying(true);
-    startSong(song);
-  };
 
   const speed = () => changeSpeed(0.5);
 
@@ -30,7 +20,7 @@ const Player = (props) => {
     <div>
       <MediaControlCard
         sectionLabel={section.label}
-        restart={restart}
+        restart={startSong}
         loadPlayPause={loadPlayPause}
         loop={loop}
         toggleLoop={toggleLoop}
@@ -38,7 +28,7 @@ const Player = (props) => {
       />
       <div id="player-controls">
         <div className="row center">
-          <div onClick={restart}>Restart </div>
+          <div onClick={startSong}>Restart </div>
           <div onClick={loadPlayPause}>Play/Pause </div>
           <div onClick={speed}>Change Speed </div>
         </div>
