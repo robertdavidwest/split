@@ -186,6 +186,7 @@ export default function MusicPlayerSlider({
           alignItems="center"
         >
           <SlowMotionVideoIcon htmlColor={lightIconColor} />
+          <TinyText>{playbackRate}</TinyText>
           <Slider
             aria-label="Speed"
             value={playbackRate}
