@@ -1,10 +1,13 @@
 import { SettingsBluetoothSharp } from "@mui/icons-material";
 import React, { useState } from "react";
 import MediaControlCard from "./MediaControlCard";
+import MusicPlayerSlider from "./MusicPlayerSlider";
 
 const Player = (props) => {
   const {
-    song,
+    duration,
+    start,
+    end,
     section,
     changeSpeed,
     startSong,
@@ -12,12 +15,25 @@ const Player = (props) => {
     loop,
     toggleLoop,
     loadPlayPause,
+    setPlayback,
   } = props;
 
   const speed = () => changeSpeed(0.5);
 
   return (
     <div>
+      <MusicPlayerSlider
+        sectionLabel={section.label}
+        restart={startSong}
+        start={start}
+        end={end}
+        duration={duration}
+        loadPlayPause={loadPlayPause}
+        loop={loop}
+        toggleLoop={toggleLoop}
+        isPlaying={isPlaying}
+        setPlayback={setPlayback}
+      />
       <MediaControlCard
         sectionLabel={section.label}
         restart={startSong}
