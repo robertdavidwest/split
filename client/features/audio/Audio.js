@@ -10,7 +10,7 @@ const Audio = ({ song, section }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loop, setLoop] = useState(false);
-  // const [playBackRate, setPlayBackRate] = useState(1.0);
+  const [playBackRate, setPlayBackRate] = useState(1.0);
 
   function addSrc() {
     let src = song.audioUrl;
@@ -35,8 +35,10 @@ const Audio = ({ song, section }) => {
 
   async function handleSectionEnd(loop) {
     // if section end defined treat it like end of song
-    if (AUDIO.currentTime > section.end) {
-      load();
+    if (AUDIO.currentTime >= section.end) {
+      addSrc();
+      AUDIO.load();
+      // load();
       if (loop) {
         await play();
       } else {
@@ -47,8 +49,6 @@ const Audio = ({ song, section }) => {
 
   async function handleSongEnd(loop) {
     if (loop) {
-      loadPlayPause();
-      AUDIO.load();
       await play();
     } else {
       pause();
@@ -117,9 +117,15 @@ const Audio = ({ song, section }) => {
     AUDIO.currentTime = value;
   };
 
+  AUDIO.addEventListener(
+    "timeupdate",
+    () => setCurrentTime(AUDIO.currentTime),
+    false
+  );
+
   useEffect(() => {
     load();
-    removeSongEndEvtListener(!loop);
+    // removeSongEndEvtListener(!loop);
     setSongEndEvtListener(loop);
   }, [loop]);
 
@@ -129,6 +135,7 @@ const Audio = ({ song, section }) => {
       duration={duration}
       start={section.start}
       end={section.end}
+      currentTime={currentTime}
       section={section}
       changeSpeed={changeSpeed}
       startSong={startSong}

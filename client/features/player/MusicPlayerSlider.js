@@ -69,6 +69,7 @@ export default function MusicPlayerSlider({
   start,
   end,
   duration,
+  currentTime,
   restart,
   loadPlayPause,
   isPlaying,
@@ -80,10 +81,14 @@ export default function MusicPlayerSlider({
   if (!start) start = 0;
   if (!end) end = duration;
 
-  const _setPlayback = (value) => {
+  const setPlaybackManually = (value) => {
     setPlayback(value);
     setPosition(value);
   };
+
+  React.useEffect(() => {
+    setPosition(Math.round(currentTime));
+  }, [currentTime]);
 
   const theme = useTheme();
   const [position, setPosition] = React.useState(0);
@@ -107,10 +112,10 @@ export default function MusicPlayerSlider({
           aria-label="time-indicator"
           size="small"
           value={position}
-          min={0}
+          min={Number(start)}
           step={1}
-          max={duration}
-          onChange={(_, value) => _setPlayback(value)}
+          max={Number(end)}
+          onChange={(_s, value) => setPlaybackManually(value)}
           sx={{
             color: theme.palette.mode === "dark" ? "#fff" : "rgba(0,0,0,0.87)",
             height: 4,
@@ -200,7 +205,6 @@ export default function MusicPlayerSlider({
               },
             }}
           />
-          {/* <VolumeUpRounded htmlColor={lightIconColor} /> */}
         </Stack>
       </Widget>
       {/* <WallPaper /> */}

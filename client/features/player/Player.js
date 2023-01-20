@@ -8,6 +8,7 @@ const Player = (props) => {
     duration,
     start,
     end,
+    currentTime,
     section,
     changeSpeed,
     startSong,
@@ -28,6 +29,7 @@ const Player = (props) => {
         start={start}
         end={end}
         duration={duration}
+        currentTime={currentTime}
         loadPlayPause={loadPlayPause}
         loop={loop}
         toggleLoop={toggleLoop}
