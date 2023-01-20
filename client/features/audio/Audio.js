@@ -10,7 +10,7 @@ const Audio = ({ song, section }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loop, setLoop] = useState(false);
-  const [playBackRate, setPlayBackRate] = useState(1.0);
+  const [playbackRate, setPlaybackRate] = useState(1.0);
 
   function addSrc() {
     let src = song.audioUrl;
@@ -117,6 +117,11 @@ const Audio = ({ song, section }) => {
     AUDIO.currentTime = value;
   };
 
+  const setAudioPlaybackRate = (value) => {
+    AUDIO.playbackRate = value;
+    setPlaybackRate(value);
+  };
+
   AUDIO.addEventListener(
     "timeupdate",
     () => setCurrentTime(AUDIO.currentTime),
@@ -144,6 +149,8 @@ const Audio = ({ song, section }) => {
       loop={loop}
       toggleLoop={toggleLoop}
       setPlayback={setPlayback}
+      playbackRate={playbackRate}
+      setAudioPlaybackRate={setAudioPlaybackRate}
     />
   );
 };

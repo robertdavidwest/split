@@ -77,6 +77,8 @@ export default function MusicPlayerSlider({
   toggleLoop,
   sectionLabel,
   setPlayback,
+  playbackRate,
+  setAudioPlaybackRate,
 }) {
   if (!start) start = 0;
   if (!end) end = duration;
@@ -100,6 +102,7 @@ export default function MusicPlayerSlider({
   const mainIconColor = theme.palette.mode === "dark" ? "#fff" : "#000";
   const lightIconColor =
     theme.palette.mode === "dark" ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)";
+
   return (
     <Box sx={{ width: "100%", overflow: "hidden" }}>
       <Widget>
@@ -185,7 +188,11 @@ export default function MusicPlayerSlider({
           <SlowMotionVideoIcon htmlColor={lightIconColor} />
           <Slider
             aria-label="Speed"
-            defaultValue={30}
+            value={playbackRate}
+            min={0}
+            step={0.1}
+            max={2}
+            onChange={(_, value) => setAudioPlaybackRate(value)}
             sx={{
               color:
                 theme.palette.mode === "dark" ? "#fff" : "rgba(0,0,0,0.87)",

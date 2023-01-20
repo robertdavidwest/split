@@ -17,6 +17,8 @@ const Player = (props) => {
     toggleLoop,
     loadPlayPause,
     setPlayback,
+    playbackRate,
+    setAudioPlaybackRate,
   } = props;
 
   const speed = () => changeSpeed(0.5);
@@ -35,6 +37,8 @@ const Player = (props) => {
         toggleLoop={toggleLoop}
         isPlaying={isPlaying}
         setPlayback={setPlayback}
+        playbackRate={playbackRate}
+        setAudioPlaybackRate={setAudioPlaybackRate}
       />
       <MediaControlCard
         sectionLabel={section.label}
