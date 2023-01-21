@@ -14,6 +14,8 @@ import SlowMotionVideoIcon from "@mui/icons-material/SlowMotionVideo";
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
+import Timer from "./Timer";
+
 const WallPaper = styled("div")({
   position: "absolute",
   width: "100%",
@@ -291,6 +293,7 @@ export default function Player({
             </Grid>
           </Grid>
         </Grid>
+        <Timer time={currentTime} />
         <Slider
           aria-label="time-indicator"
           size="small"
@@ -335,7 +338,7 @@ export default function Player({
           }}
         >
           <TinyText>{formatDuration(start)}</TinyText>
-          <TinyText>-{formatDuration(end - position)}</TinyText>
+          <TinyText>-{formatDuration(end)}</TinyText>
         </Box>
         <Box
           sx={{
