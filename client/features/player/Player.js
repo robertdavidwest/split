@@ -18,7 +18,7 @@ import Timer from "./Timer";
 const Widget = styled("div")(({ theme }) => ({
   padding: 16,
   borderRadius: 16,
-  width: 500,
+  width: 380,
   maxWidth: "100%",
   margin: "auto",
   position: "relative",
