@@ -67,7 +67,7 @@ const TinyText = styled(Typography)({
   letterSpacing: 0.2,
 });
 
-export default function MusicPlayerSlider({
+export default function Player({
   start,
   setStart,
   end,

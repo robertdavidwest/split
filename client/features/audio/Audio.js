@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import MusicPlayerSlider from "../player/MusicPlayerSlider";
+import Player from "../player/Player";
 
 const AUDIO = document.createElement("audio");
 AUDIO.setAttribute("preload", "metadata");
@@ -99,7 +99,7 @@ const Audio = ({ song, section }) => {
   }, [AUDIO.paused]);
 
   return (
-    <MusicPlayerSlider
+    <Player
       sectionLabel={section.label}
       restart={startSong}
       start={start}
