@@ -15,47 +15,13 @@ import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Timer from "./Timer";
 
-const WallPaper = styled("div")({
-  position: "absolute",
-  width: "100%",
-  height: "100%",
-  top: 0,
-  left: 0,
-  overflow: "hidden",
-
-  background: "linear-gradient(rgb(255, 38, 142) 0%, rgb(255, 105, 79) 100%)",
-  transition: "all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s",
-  "&:before": {
-    content: '""',
-    width: "140%",
-    height: "140%",
-    position: "absolute",
-    top: "-40%",
-    right: "-50%",
-    background:
-      "radial-gradient(at center center, rgb(62, 79, 249) 0%, rgba(62, 79, 249, 0) 64%)",
-  },
-  "&:after": {
-    content: '""',
-    width: "140%",
-    height: "140%",
-    position: "absolute",
-    bottom: "-50%",
-    left: "-30%",
-    background:
-      "radial-gradient(at center center, rgb(247, 237, 225) 0%, rgba(247, 237, 225, 0) 70%)",
-    transform: "rotate(30deg)",
-  },
-});
-
 const Widget = styled("div")(({ theme }) => ({
   padding: 16,
   borderRadius: 16,
-  width: 343,
+  width: 500,
   maxWidth: "100%",
   margin: "auto",
   position: "relative",
-  zIndex: 1,
   backgroundColor:
     theme.palette.mode === "dark" ? "rgba(0,0,0,0.6)" : "rgba(255,255,255,0.4)",
   backdropFilter: "blur(40px)",
@@ -69,6 +35,7 @@ const TinyText = styled(Typography)({
 });
 
 export default function Player({
+  label,
   start,
   setStart,
   end,
@@ -115,7 +82,7 @@ export default function Player({
   const [endMinutes, setEndMinutes] = React.useState(maxMins);
   const [endSeconds, setEndSeconds] = React.useState(remainingSeconds);
 
-  const [sectionLabel, setSectionLabel] = React.useState("Section1");
+  const [sectionLabel, setSectionLabel] = React.useState(label);
 
   const changeMinutes = (value, startOrEnd) => {
     value = Number(value);
@@ -202,208 +169,194 @@ export default function Player({
   }, [startSeconds, startMinutes, endSeconds, endMinutes]);
 
   return (
-    <Box sx={{ width: "100%", overflow: "hidden" }}>
-      <Widget>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <TextField
-            size="small"
-            label="Section"
-            variant="standard"
-            value={sectionLabel}
-            onChange={(e) => setSectionLabel(e.target.value)}
-          />
-        </Box>
-        <Grid
-          container
-          spacing={2}
-          columns={15}
-          sx={{
-            marginTop: "10px",
-            marginBottom: "10px",
-          }}
-        >
-          <Grid item xs={7}>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              fontWeight={500}
-            >
-              {"Start"}
-            </Typography>
-            <Grid container spacing={2} columns={2}>
-              <Grid item xs={1}>
-                <TextField
-                  size="small"
-                  helperText="minutes"
-                  placeholder={"MM"}
-                  value={startMinutes}
-                  type="number"
-                  onChange={(e) => changeStartMinutes(e.target.value)}
-                  InputProps={{
-                    inputProps: { min: 0 },
-                  }}
-                />
-              </Grid>
-              <Grid item xs={1}>
-                <TextField
-                  size="small"
-                  helperText="seconds"
-                  placeholder={"SS"}
-                  value={startSeconds}
-                  type="number"
-                  onChange={(e) => changeStartSeconds(e.target.value)}
-                  InputProps={{
-                    inputProps: { min: -1 },
-                  }}
-                />
-              </Grid>
+    <Widget>
+      <TextField
+        size="small"
+        label="Section"
+        variant="standard"
+        value={sectionLabel}
+        onChange={(e) => setSectionLabel(e.target.value)}
+      />
+      <Grid
+        container
+        spacing={2}
+        columns={15}
+        sx={{
+          marginTop: "10px",
+          marginBottom: "10px",
+        }}
+      >
+        <Grid item xs={7}>
+          <Typography variant="caption" color="text.secondary" fontWeight={500}>
+            {"Start"}
+          </Typography>
+          <Grid container spacing={2} columns={2}>
+            <Grid item xs={1}>
+              <TextField
+                size="small"
+                helperText="minutes"
+                placeholder={"MM"}
+                value={startMinutes}
+                type="number"
+                onChange={(e) => changeStartMinutes(e.target.value)}
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+              />
             </Grid>
-          </Grid>
-          <Grid item xs={1}></Grid>
-          <Grid item xs={7}>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              fontWeight={500}
-            >
-              {"End"}
-            </Typography>
-            <Grid container spacing={2} columns={2}>
-              <Grid item xs={1}>
-                <TextField
-                  size="small"
-                  helperText="minutes"
-                  placeholder={"MM"}
-                  value={endMinutes}
-                  type="number"
-                  onChange={(e) => changeEndMinutes(e.target.value)}
-                  InputProps={{
-                    inputProps: { min: 0 },
-                  }}
-                />
-              </Grid>
-              <Grid item xs={1}>
-                <TextField
-                  size="small"
-                  helperText="seconds"
-                  placeholder={"SS"}
-                  value={endSeconds}
-                  type="number"
-                  onChange={(e) => changeEndSeconds(e.target.value)}
-                  InputProps={{
-                    inputProps: { min: -1 },
-                  }}
-                />
-              </Grid>
+            <Grid item xs={1}>
+              <TextField
+                size="small"
+                helperText="seconds"
+                placeholder={"SS"}
+                value={startSeconds}
+                type="number"
+                onChange={(e) => changeStartSeconds(e.target.value)}
+                InputProps={{
+                  inputProps: { min: -1 },
+                }}
+              />
             </Grid>
           </Grid>
         </Grid>
-        <Timer time={currentTime} />
+        <Grid item xs={1}></Grid>
+        <Grid item xs={7}>
+          <Typography variant="caption" color="text.secondary" fontWeight={500}>
+            {"End"}
+          </Typography>
+          <Grid container spacing={2} columns={2}>
+            <Grid item xs={1}>
+              <TextField
+                size="small"
+                helperText="minutes"
+                placeholder={"MM"}
+                value={endMinutes}
+                type="number"
+                onChange={(e) => changeEndMinutes(e.target.value)}
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <TextField
+                size="small"
+                helperText="seconds"
+                placeholder={"SS"}
+                value={endSeconds}
+                type="number"
+                onChange={(e) => changeEndSeconds(e.target.value)}
+                InputProps={{
+                  inputProps: { min: -1 },
+                }}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Timer time={currentTime} />
+      <Slider
+        aria-label="time-indicator"
+        size="small"
+        value={position}
+        min={Number(start)}
+        step={0.1}
+        max={Number(end)}
+        onChange={(_, value) => setPlaybackManually(value)}
+        sx={{
+          color: theme.palette.mode === "dark" ? "#fff" : "rgba(0,0,0,0.87)",
+          height: 4,
+          "& .MuiSlider-thumb": {
+            width: 8,
+            height: 8,
+            transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
+            "&:before": {
+              boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
+            },
+            "&:hover, &.Mui-focusVisible": {
+              boxShadow: `0px 0px 0px 8px ${
+                theme.palette.mode === "dark"
+                  ? "rgb(255 255 255 / 16%)"
+                  : "rgb(0 0 0 / 16%)"
+              }`,
+            },
+            "&.Mui-active": {
+              width: 20,
+              height: 20,
+            },
+          },
+          "& .MuiSlider-rail": {
+            opacity: 0.28,
+          },
+        }}
+      />
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mt: -2,
+        }}
+      >
+        <TinyText>{formatDuration(start)}</TinyText>
+        <TinyText>-{formatDuration(end)}</TinyText>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mt: -1,
+        }}
+      >
+        <IconButton aria-label="restart" onClick={restart}>
+          <RestartAltIcon />
+        </IconButton>
+        <IconButton aria-label="play/pause" onClick={loadPlayPause}>
+          {isPlaying ? (
+            <PauseIcon sx={{ height: 38, width: 38 }} />
+          ) : (
+            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+          )}
+        </IconButton>
+        <IconButton aria-label="loop" onClick={toggleLoop}>
+          {loop ? <LoopIcon sx={{ color: "lightgreen" }} /> : <LoopIcon />}
+        </IconButton>
+      </Box>
+      <Stack
+        spacing={2}
+        direction="row"
+        sx={{ mb: 1, px: 1 }}
+        alignItems="center"
+      >
+        <SlowMotionVideoIcon htmlColor={lightIconColor} />
+        <TinyText>{playbackRate}</TinyText>
         <Slider
-          aria-label="time-indicator"
-          size="small"
-          value={position}
-          min={Number(start)}
+          aria-label="Speed"
+          value={playbackRate}
+          min={0}
           step={0.1}
-          max={Number(end)}
-          onChange={(_, value) => setPlaybackManually(value)}
+          max={2}
+          onChange={(_, value) => setAudioPlaybackRate(value)}
           sx={{
             color: theme.palette.mode === "dark" ? "#fff" : "rgba(0,0,0,0.87)",
-            height: 4,
-            "& .MuiSlider-thumb": {
-              width: 8,
-              height: 8,
-              transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
-              "&:before": {
-                boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
-              },
-              "&:hover, &.Mui-focusVisible": {
-                boxShadow: `0px 0px 0px 8px ${
-                  theme.palette.mode === "dark"
-                    ? "rgb(255 255 255 / 16%)"
-                    : "rgb(0 0 0 / 16%)"
-                }`,
-              },
-              "&.Mui-active": {
-                width: 20,
-                height: 20,
-              },
+            "& .MuiSlider-track": {
+              border: "none",
             },
-            "& .MuiSlider-rail": {
-              opacity: 0.28,
+            "& .MuiSlider-thumb": {
+              width: 24,
+              height: 24,
+              backgroundColor: "#fff",
+              "&:before": {
+                boxShadow: "0 4px 8px rgba(0,0,0,0.4)",
+              },
+              "&:hover, &.Mui-focusVisible, &.Mui-active": {
+                boxShadow: "none",
+              },
             },
           }}
         />
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            mt: -2,
-          }}
-        >
-          <TinyText>{formatDuration(start)}</TinyText>
-          <TinyText>-{formatDuration(end)}</TinyText>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mt: -1,
-          }}
-        >
-          <IconButton aria-label="restart" onClick={restart}>
-            <RestartAltIcon />
-          </IconButton>
-          <IconButton aria-label="play/pause" onClick={loadPlayPause}>
-            {isPlaying ? (
-              <PauseIcon sx={{ height: 38, width: 38 }} />
-            ) : (
-              <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-            )}
-          </IconButton>
-          <IconButton aria-label="loop" onClick={toggleLoop}>
-            {loop ? <LoopIcon sx={{ color: "lightgreen" }} /> : <LoopIcon />}
-          </IconButton>
-        </Box>
-        <Stack
-          spacing={2}
-          direction="row"
-          sx={{ mb: 1, px: 1 }}
-          alignItems="center"
-        >
-          <SlowMotionVideoIcon htmlColor={lightIconColor} />
-          <TinyText>{playbackRate}</TinyText>
-          <Slider
-            aria-label="Speed"
-            value={playbackRate}
-            min={0}
-            step={0.1}
-            max={2}
-            onChange={(_, value) => setAudioPlaybackRate(value)}
-            sx={{
-              color:
-                theme.palette.mode === "dark" ? "#fff" : "rgba(0,0,0,0.87)",
-              "& .MuiSlider-track": {
-                border: "none",
-              },
-              "& .MuiSlider-thumb": {
-                width: 24,
-                height: 24,
-                backgroundColor: "#fff",
-                "&:before": {
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.4)",
-                },
-                "&:hover, &.Mui-focusVisible, &.Mui-active": {
-                  boxShadow: "none",
-                },
-              },
-            }}
-          />
-        </Stack>
-      </Widget>
-      {/* <WallPaper /> */}
-    </Box>
+      </Stack>
+    </Widget>
   );
 }

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Player from "../player/Player";
 
-const AUDIO = document.createElement("audio");
-AUDIO.setAttribute("preload", "metadata");
-
-const Audio = ({ song }) => {
+const Audio = ({ song, label, audio }) => {
   const [loaded, setLoaded] = useState(false);
   const [duration, setDuration] = useState(0);
   const [start, setStart] = useState(0);
@@ -23,25 +20,25 @@ const Audio = ({ song }) => {
     if (end) {
       src += `,${end}`;
     }
-    AUDIO.src = src;
+    audio.src = src;
   }
 
   async function play() {
-    await AUDIO.play();
+    await audio.play();
     setIsPlaying(true);
   }
 
   function pause() {
-    AUDIO.pause();
+    audio.pause();
     setIsPlaying(false);
   }
 
   async function load() {
     addSrc();
-    AUDIO.load();
+    audio.load();
     setLoaded(true);
-    AUDIO.onloadedmetadata = function () {
-      const orig = Math.round(AUDIO.duration);
+    audio.onloadedmetadata = function () {
+      const orig = Math.round(audio.duration);
       setDuration(orig);
     };
   }
@@ -70,17 +67,17 @@ const Audio = ({ song }) => {
   };
 
   const setPlayback = (value) => {
-    AUDIO.currentTime = value;
+    audio.currentTime = value;
   };
 
   const setAudioPlaybackRate = (value) => {
-    AUDIO.playbackRate = value;
+    audio.playbackRate = value;
     setPlaybackRate(value);
   };
 
-  AUDIO.addEventListener(
+  audio.addEventListener(
     "timeupdate",
-    () => setCurrentTime(AUDIO.currentTime),
+    () => setCurrentTime(audio.currentTime),
     false
   );
 
@@ -91,15 +88,16 @@ const Audio = ({ song }) => {
   }, [start, end]);
 
   useEffect(() => {
-    if (AUDIO.currentTime >= end) {
+    if (audio.currentTime >= end) {
       setIsPlaying(false);
       load();
       if (loop) play();
     }
-  }, [AUDIO.paused]);
+  }, [audio.paused]);
 
   return (
     <Player
+      label={label}
       restart={startSong}
       start={start}
       setStart={setStart}
