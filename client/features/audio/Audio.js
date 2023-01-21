@@ -16,7 +16,6 @@ const Audio = ({ song, section }) => {
 
   function addSrc() {
     let src = song.audioUrl;
-
     let _start;
     if (!start) _start = 0;
     else _start = start;
@@ -35,45 +34,6 @@ const Audio = ({ song, section }) => {
   function pause() {
     AUDIO.pause();
     setIsPlaying(false);
-  }
-
-  async function handleSectionEnd(loop) {
-    // if section end defined treat it like end of song
-    if (AUDIO.currentTime >= end) {
-      addSrc();
-      AUDIO.load();
-      // load();
-      if (loop) {
-        await play();
-      } else {
-        pause();
-      }
-    }
-  }
-
-  async function handleSongEnd(loop) {
-    if (loop) {
-      await play();
-    } else {
-      pause();
-      addSrc();
-    }
-  }
-
-  function removeSongEndEvtListener(loop) {
-    if (end) {
-      AUDIO.removeEventListener("pause", async () => handleSectionEnd(loop));
-    } else {
-      AUDIO.removeEventListener("ended", async () => handleSongEnd(loop));
-    }
-  }
-
-  function setSongEndEvtListener(loop) {
-    if (end) {
-      AUDIO.addEventListener("pause", async () => handleSectionEnd(loop));
-    } else {
-      AUDIO.addEventListener("ended", async () => handleSongEnd(loop));
-    }
   }
 
   async function load() {
@@ -131,10 +91,12 @@ const Audio = ({ song, section }) => {
   }, [start, end]);
 
   useEffect(() => {
-    load();
-    // removeSongEndEvtListener(!loop);
-    setSongEndEvtListener(loop);
-  }, [loop]);
+    if (AUDIO.currentTime >= end) {
+      setIsPlaying(false);
+      load();
+      if (loop) play();
+    }
+  }, [AUDIO.paused]);
 
   return (
     <Player
