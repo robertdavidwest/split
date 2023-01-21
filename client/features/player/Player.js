@@ -13,7 +13,6 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SlowMotionVideoIcon from "@mui/icons-material/SlowMotionVideo";
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
-
 import Timer from "./Timer";
 
 const WallPaper = styled("div")({
@@ -81,7 +80,6 @@ export default function Player({
   isPlaying,
   loop,
   toggleLoop,
-  sectionLabel,
   setPlayback,
   playbackRate,
   setAudioPlaybackRate,
@@ -116,6 +114,8 @@ export default function Player({
   const [startSeconds, setStartSeconds] = React.useState(0);
   const [endMinutes, setEndMinutes] = React.useState(maxMins);
   const [endSeconds, setEndSeconds] = React.useState(remainingSeconds);
+
+  const [sectionLabel, setSectionLabel] = React.useState("Section1");
 
   const changeMinutes = (value, startOrEnd) => {
     value = Number(value);
@@ -205,15 +205,20 @@ export default function Player({
     <Box sx={{ width: "100%", overflow: "hidden" }}>
       <Widget>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography noWrap letterSpacing={-0.25}>
-            {sectionLabel}
-          </Typography>
+          <TextField
+            size="small"
+            label="Section"
+            variant="standard"
+            value={sectionLabel}
+            onChange={(e) => setSectionLabel(e.target.value)}
+          />
         </Box>
         <Grid
           container
           spacing={2}
           columns={15}
           sx={{
+            marginTop: "10px",
             marginBottom: "10px",
           }}
         >

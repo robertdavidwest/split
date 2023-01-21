@@ -4,7 +4,7 @@ import Player from "../player/Player";
 const AUDIO = document.createElement("audio");
 AUDIO.setAttribute("preload", "metadata");
 
-const Audio = ({ song, section }) => {
+const Audio = ({ song }) => {
   const [loaded, setLoaded] = useState(false);
   const [duration, setDuration] = useState(0);
   const [start, setStart] = useState(0);
@@ -100,7 +100,6 @@ const Audio = ({ song, section }) => {
 
   return (
     <Player
-      sectionLabel={section.label}
       restart={startSong}
       start={start}
       setStart={setStart}
