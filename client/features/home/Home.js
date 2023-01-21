@@ -13,10 +13,6 @@ const Home = (props) => {
   const song = { audioUrl: "02 - Pride and Joy.mp3", id: 1 };
   const section = {
     label: "Solo",
-    // start: "100",
-    // start: "215",
-    // end: "217",
-    // end: "102",
     units: "seconds",
   };
 

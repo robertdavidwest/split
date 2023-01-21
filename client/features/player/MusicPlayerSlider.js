@@ -11,6 +11,8 @@ import PauseIcon from "@mui/icons-material/Pause";
 import LoopIcon from "@mui/icons-material/Loop";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SlowMotionVideoIcon from "@mui/icons-material/SlowMotionVideo";
+import { TextField } from "@mui/material";
+import Grid from "@mui/material/Grid";
 
 const WallPaper = styled("div")({
   position: "absolute",
@@ -67,7 +69,9 @@ const TinyText = styled(Typography)({
 
 export default function MusicPlayerSlider({
   start,
+  setStart,
   end,
+  setEnd,
   duration,
   currentTime,
   restart,
@@ -103,22 +107,198 @@ export default function MusicPlayerSlider({
   const lightIconColor =
     theme.palette.mode === "dark" ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)";
 
+  const maxMins = Math.floor(duration / 60);
+  const remainingSeconds = duration - maxMins * 60;
+
+  const [startMinutes, setStartMinutes] = React.useState(0);
+  const [startSeconds, setStartSeconds] = React.useState(0);
+  const [endMinutes, setEndMinutes] = React.useState(maxMins);
+  const [endSeconds, setEndSeconds] = React.useState(remainingSeconds);
+
+  const changeMinutes = (value, startOrEnd) => {
+    value = Number(value);
+    value = Math.min(maxMins, value);
+
+    if (startOrEnd === "start") setStartMinutes(value);
+    else if (startOrEnd === "end") setEndMinutes(value);
+  };
+
+  const changeSeconds = (value, startOrEnd) => {
+    value = Number(value);
+    let minutes;
+    if (startOrEnd === "start") minutes = startMinutes;
+    else if (startOrEnd === "end") minutes = endMinutes;
+
+    let priorSeconds;
+    if (startOrEnd === "start") priorSeconds = startSeconds;
+    else if (startOrEnd === "end") priorSeconds = endSeconds;
+
+    let valueMinutes;
+    if ((value === 60) & (priorSeconds === 59) & (minutes < maxMins)) {
+      value = 0;
+      valueMinutes = minutes + 1;
+    } else if ((value === -1) & (priorSeconds === 0) & (minutes > 0)) {
+      value = 59;
+      valueMinutes = minutes - 1;
+    } else {
+      const maxSeconds = minutes === maxMins ? remainingSeconds : 59;
+      value = Math.min(maxSeconds, value);
+    }
+
+    if (startOrEnd === "start") setStartSeconds(value);
+    else if (startOrEnd === "end") setEndSeconds(value);
+    if (!(typeof valueMinutes === "undefined")) {
+      if (startOrEnd === "start") setStartMinutes(valueMinutes);
+      else if (startOrEnd === "end") setEndMinutes(valueMinutes);
+    }
+  };
+
+  const changeStartMinutes = (value) => {
+    value = Number(value);
+    // ensure start time never after end time
+    value = Math.min(value, endMinutes);
+    changeMinutes(value, "start");
+  };
+
+  const changeStartSeconds = (value) => {
+    value = Number(value);
+    // ensure start time never after end time
+    const maxValue = end - startMinutes * 60;
+    value = Math.min(value, maxValue);
+    changeSeconds(value, "start");
+  };
+
+  const changeEndMinutes = (value) => {
+    value = Number(value);
+    // ensure start time never after end time
+    value = Math.max(value, startMinutes);
+    changeMinutes(value, "end");
+  };
+
+  const changeEndSeconds = (value) => {
+    value = Number(value);
+    // ensure start time never after end time
+    const minValue = start - endMinutes * 60;
+    value = Math.max(value, minValue);
+    changeSeconds(value, "end");
+  };
+
+  React.useEffect(() => {
+    const maxMins = Math.floor(duration / 60);
+    const remainingSeconds = duration - maxMins * 60;
+
+    setEndMinutes(maxMins);
+    setEndSeconds(remainingSeconds);
+  }, [duration]);
+
+  React.useEffect(() => {
+    const currentStartSeconds = startSeconds + startMinutes * 60;
+    setStart(currentStartSeconds);
+
+    const currentEndSeconds = endSeconds + endMinutes * 60;
+    setEnd(currentEndSeconds);
+  }, [startSeconds, startMinutes, endSeconds, endMinutes]);
+
   return (
     <Box sx={{ width: "100%", overflow: "hidden" }}>
       <Widget>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="caption" color="text.secondary" fontWeight={500}>
-            {`Section Label: ${sectionLabel}`}
+          <Typography noWrap letterSpacing={-0.25}>
+            {sectionLabel}
           </Typography>
         </Box>
+        <Grid
+          container
+          spacing={2}
+          columns={15}
+          sx={{
+            marginBottom: "10px",
+          }}
+        >
+          <Grid item xs={7}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              fontWeight={500}
+            >
+              {"Start"}
+            </Typography>
+            <Grid container spacing={2} columns={2}>
+              <Grid item xs={1}>
+                <TextField
+                  size="small"
+                  helperText="minutes"
+                  placeholder={"MM"}
+                  value={startMinutes}
+                  type="number"
+                  onChange={(e) => changeStartMinutes(e.target.value)}
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <TextField
+                  size="small"
+                  helperText="seconds"
+                  placeholder={"SS"}
+                  value={startSeconds}
+                  type="number"
+                  onChange={(e) => changeStartSeconds(e.target.value)}
+                  InputProps={{
+                    inputProps: { min: -1 },
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={7}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              fontWeight={500}
+            >
+              {"End"}
+            </Typography>
+            <Grid container spacing={2} columns={2}>
+              <Grid item xs={1}>
+                <TextField
+                  size="small"
+                  helperText="minutes"
+                  placeholder={"MM"}
+                  value={endMinutes}
+                  type="number"
+                  onChange={(e) => changeEndMinutes(e.target.value)}
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <TextField
+                  size="small"
+                  helperText="seconds"
+                  placeholder={"SS"}
+                  value={endSeconds}
+                  type="number"
+                  onChange={(e) => changeEndSeconds(e.target.value)}
+                  InputProps={{
+                    inputProps: { min: -1 },
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
         <Slider
           aria-label="time-indicator"
           size="small"
           value={position}
           min={Number(start)}
-          step={1}
+          step={0.1}
           max={Number(end)}
-          onChange={(_s, value) => setPlaybackManually(value)}
+          onChange={(_, value) => setPlaybackManually(value)}
           sx={{
             color: theme.palette.mode === "dark" ? "#fff" : "rgba(0,0,0,0.87)",
             height: 4,

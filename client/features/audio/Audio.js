@@ -7,6 +7,8 @@ AUDIO.setAttribute("preload", "metadata");
 const Audio = ({ song, section }) => {
   const [loaded, setLoaded] = useState(false);
   const [duration, setDuration] = useState(0);
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(duration);
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loop, setLoop] = useState(false);
@@ -14,11 +16,13 @@ const Audio = ({ song, section }) => {
 
   function addSrc() {
     let src = song.audioUrl;
-    if (section.start) {
-      src += `#t=${section.start}`;
-    }
-    if (section.start & section.end) {
-      src += `,${section.end}`;
+
+    let _start;
+    if (!start) _start = 0;
+    else _start = start;
+    src += `#t=${_start}`;
+    if (end) {
+      src += `,${end}`;
     }
     AUDIO.src = src;
   }
@@ -35,7 +39,7 @@ const Audio = ({ song, section }) => {
 
   async function handleSectionEnd(loop) {
     // if section end defined treat it like end of song
-    if (AUDIO.currentTime >= section.end) {
+    if (AUDIO.currentTime >= end) {
       addSrc();
       AUDIO.load();
       // load();
@@ -57,7 +61,7 @@ const Audio = ({ song, section }) => {
   }
 
   function removeSongEndEvtListener(loop) {
-    if (section.end) {
+    if (end) {
       AUDIO.removeEventListener("pause", async () => handleSectionEnd(loop));
     } else {
       AUDIO.removeEventListener("ended", async () => handleSongEnd(loop));
@@ -65,7 +69,7 @@ const Audio = ({ song, section }) => {
   }
 
   function setSongEndEvtListener(loop) {
-    if (section.end) {
+    if (end) {
       AUDIO.addEventListener("pause", async () => handleSectionEnd(loop));
     } else {
       AUDIO.addEventListener("ended", async () => handleSongEnd(loop));
@@ -78,16 +82,8 @@ const Audio = ({ song, section }) => {
     setLoaded(true);
     AUDIO.onloadedmetadata = function () {
       const orig = Math.round(AUDIO.duration);
-      // let duration = orig;
-      // if (section.start) duration -= section.start;
-      // if (section.end) duration -= orig - section.end;
-      // setDuration(duration);
       setDuration(orig);
     };
-  }
-
-  function changeSpeed(speed) {
-    AUDIO.playbackRate = speed;
   }
 
   function startSong() {
@@ -129,6 +125,12 @@ const Audio = ({ song, section }) => {
   );
 
   useEffect(() => {
+    const wasPlaying = isPlaying;
+    load();
+    if (wasPlaying) play();
+  }, [start, end]);
+
+  useEffect(() => {
     load();
     // removeSongEndEvtListener(!loop);
     setSongEndEvtListener(loop);
@@ -136,13 +138,13 @@ const Audio = ({ song, section }) => {
 
   return (
     <Player
-      audio={AUDIO}
       duration={duration}
-      start={section.start}
-      end={section.end}
+      start={start}
+      setStart={setStart}
+      end={end}
+      setEnd={setEnd}
       currentTime={currentTime}
       section={section}
-      changeSpeed={changeSpeed}
       startSong={startSong}
       isPlaying={isPlaying}
       loadPlayPause={loadPlayPause}
