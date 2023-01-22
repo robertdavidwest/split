@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
-
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import LoopIcon from "@mui/icons-material/Loop";
@@ -13,15 +12,12 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SlowMotionVideoIcon from "@mui/icons-material/SlowMotionVideo";
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
+
 import Timer from "./Timer";
 
 const Widget = styled("div")(({ theme }) => ({
   padding: 16,
   borderRadius: 16,
-  width: 380,
-  maxWidth: "100%",
-  margin: "auto",
-  position: "relative",
   backgroundColor:
     theme.palette.mode === "dark" ? "rgba(0,0,0,0.6)" : "rgba(255,255,255,0.4)",
   backdropFilter: "blur(40px)",
