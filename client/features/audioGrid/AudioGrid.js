@@ -1,9 +1,10 @@
 import React from "react";
-import Audio from "../audio/Audio";
-import TrackHeader from "../trackHeader/TrackHeader";
-
 import { Grid } from "@mui/material";
 import { Container } from "@mui/material";
+
+import Audio from "../audio/Audio";
+import TrackHeader from "../trackHeader/TrackHeader";
+import AddNewPlayer from "../addNewPlayer/AddNewPlayer";
 
 export const AudioGrid = (props) => {
   const song = {
@@ -16,8 +17,8 @@ export const AudioGrid = (props) => {
   const audioElements = [
     document.createElement("audio"),
     document.createElement("audio"),
-    document.createElement("audio"),
-    document.createElement("audio"),
+    // document.createElement("audio"),
+    // document.createElement("audio"),
   ];
 
   return (
@@ -35,7 +36,11 @@ export const AudioGrid = (props) => {
           <Grid container spacing={2} columns={2} rowSpacing={2}>
             {audioElements.map((audio, i) => (
               <Grid key={i} item sm={2} md={1}>
-                <Audio song={song} label={`Section ${i + 1}`} audio={audio} />
+                {i === 1 ? (
+                  <AddNewPlayer />
+                ) : (
+                  <Audio song={song} label={`Section ${i + 1}`} audio={audio} />
+                )}
               </Grid>
             ))}
           </Grid>

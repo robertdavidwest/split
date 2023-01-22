@@ -1,23 +1,15 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-
 import { TextField } from "@mui/material";
 
-const Widget = styled("div")(({ theme }) => ({
-  padding: 16,
-  borderRadius: 16,
-  backgroundColor:
-    theme.palette.mode === "dark" ? "rgba(0,0,0,0.6)" : "rgba(255,255,255,0.4)",
-  backdropFilter: "blur(40px)",
-}));
+import { HeaderWidget } from "../widget/Widget";
 
 export default function TrackHeader({ mp3Filename, dftSongName, dftArtist }) {
   const [songName, setSongName] = React.useState(dftSongName);
   const [artist, setArtist] = React.useState(dftArtist);
 
   return (
-    <Widget>
+    <HeaderWidget>
       <TextField
         size="small"
         label="Song Name"
@@ -35,6 +27,6 @@ export default function TrackHeader({ mp3Filename, dftSongName, dftArtist }) {
       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
         {mp3Filename}
       </Typography>
-    </Widget>
+    </HeaderWidget>
   );
 }
