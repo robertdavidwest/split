@@ -20,6 +20,7 @@ async function seed() {
     name: "Pride & Joy",
     audioUrl: "02 - Pride and Joy.mp3",
     artist: "Stevie Ray Vaughan",
+    duration: 219.402449,
   });
 
   await song.setUser(user);

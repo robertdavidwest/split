@@ -5,6 +5,8 @@ import { Container } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchSongSectionsAsync,
+  createSectionAsync,
+  createSection,
   selectSong,
   selectSongSections,
 } from "./audioGridSlice";
@@ -34,8 +36,17 @@ export const AudioGrid = (props) => {
   }, [dispatch]);
 
   function addNewPlayer() {
-    console.log("add new player to be built");
-    // audioElements.push(document.createElement("audio"));
+    const nextSectionNum = sections.length + 1;
+    const payload = {
+      songId,
+      label: `Section ${nextSectionNum}`,
+      start: 0,
+      end: song.duration,
+      playbackRate: 1.0,
+      loop: false,
+    };
+    dispatch(createSectionAsync(payload));
+    dispatch(createSection(payload));
   }
 
   return (

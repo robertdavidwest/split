@@ -13,9 +13,26 @@ export const fetchSongSectionsAsync = createAsyncThunk(
   }
 );
 
+export const createSectionAsync = createAsyncThunk(
+  "createSection",
+  async (payload) => {
+    try {
+      const { data } = await axios.post("api/sections", payload);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const audioGridSlice = createSlice({
   name: "audioGrid",
   initialState: { song: {}, sections: [] },
+  reducers: {
+    createSection(state, action) {
+      state.sections.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchSongSectionsAsync.fulfilled, (state, action) => {
       const { sections, ...rest } = action.payload;
@@ -33,4 +50,5 @@ export const selectSongSections = (state) => {
   return state.audioGrid.sections;
 };
 
+export const { createSection } = audioGridSlice.actions;
 export default audioGridSlice.reducer;
