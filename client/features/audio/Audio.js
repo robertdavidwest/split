@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Player from "../player/Player";
 
-const Audio = ({ song, label, audio }) => {
+const Audio = ({ song, section, audio }) => {
   const [loaded, setLoaded] = useState(false);
   const [duration, setDuration] = useState(0);
   const [start, setStart] = useState(0);
@@ -41,6 +41,8 @@ const Audio = ({ song, label, audio }) => {
       const orig = Math.round(audio.duration);
       setDuration(orig);
     };
+
+    setAudioPlaybackRate(playbackRate);
   }
 
   function startSong() {
@@ -95,9 +97,17 @@ const Audio = ({ song, label, audio }) => {
     }
   }, [audio.paused]);
 
+  useEffect(() => {
+    if (song.duration) setDuration(song.duration);
+    setStart(section.start);
+    setEnd(section.end);
+    setLoop(section.loop);
+    setAudioPlaybackRate(section.playbackRate);
+  }, [song, section]);
+
   return (
     <Player
-      label={label}
+      label={section.label}
       restart={startSong}
       start={start}
       setStart={setStart}

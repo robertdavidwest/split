@@ -19,7 +19,12 @@ router.get("/:songId", async (req, res, next) => {
   try {
     const songSections = await Song.findByPk(req.params.songId, {
       attributes: ["id", "name", "artist", "duration", "audioUrl"],
-      include: Section,
+      include: [
+        {
+          model: Section,
+          attributes: ["label", "start", "end", "playbackRate", "loop"],
+        },
+      ],
     });
     res.json(songSections);
   } catch (err) {

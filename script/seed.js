@@ -28,15 +28,15 @@ async function seed() {
     label: "intro",
     start: 0,
     end: 30,
-    playBackRate: 0.75,
+    playbackRate: 0.75,
     loop: true,
   });
 
   const section2 = await Section.create({
     label: "solo",
-    start: 99,
-    end: 144,
-    playBackRate: 0.5,
+    start: 99.01,
+    end: 144.1234,
+    playbackRate: 0.5,
     loop: true,
   });
 

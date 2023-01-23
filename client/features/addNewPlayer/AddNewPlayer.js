@@ -7,10 +7,10 @@ import { Widget } from "../widget/Widget";
 
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
-export default function AddNewPlayer() {
+export default function AddNewPlayer({ addNewPlayer }) {
   return (
     <Widget>
-      <CardActionArea>
+      <CardActionArea onClick={addNewPlayer}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             Add New Player

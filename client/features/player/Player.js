@@ -40,9 +40,6 @@ export default function Player({
   playbackRate,
   setAudioPlaybackRate,
 }) {
-  if (!start) start = 0;
-  if (!end) end = duration;
-
   const setPlaybackManually = (value) => {
     setPlayback(value);
     setPosition(value);
@@ -54,6 +51,7 @@ export default function Player({
 
   const theme = useTheme();
   const [position, setPosition] = React.useState(0);
+
   function formatDuration(value) {
     const minute = Math.floor(value / 60);
     const secondLeft = value - minute * 60;
@@ -142,20 +140,26 @@ export default function Player({
   };
 
   React.useEffect(() => {
-    const maxMins = Math.floor(duration / 60);
-    const remainingSeconds = duration - maxMins * 60;
-
-    setEndMinutes(maxMins);
-    setEndSeconds(remainingSeconds);
-  }, [duration]);
-
-  React.useEffect(() => {
     const currentStartSeconds = startSeconds + startMinutes * 60;
     setStart(currentStartSeconds);
 
     const currentEndSeconds = endSeconds + endMinutes * 60;
     setEnd(currentEndSeconds);
   }, [startSeconds, startMinutes, endSeconds, endMinutes]);
+
+  React.useEffect(() => {
+    const mins = Math.floor(start / 60);
+    const secs = Math.round(start - mins * 60);
+    setStartMinutes(mins);
+    setStartSeconds(secs);
+  }, [start]);
+
+  React.useEffect(() => {
+    const mins = Math.floor(end / 60);
+    const secs = Math.round(end - mins * 60);
+    setEndMinutes(mins);
+    setEndSeconds(secs);
+  }, [end]);
 
   return (
     <Widget>
@@ -287,8 +291,8 @@ export default function Player({
           mt: -2,
         }}
       >
-        <TinyText>{formatDuration(start)}</TinyText>
-        <TinyText>-{formatDuration(end)}</TinyText>
+        <TinyText>{formatDuration(Math.round(start))}</TinyText>
+        <TinyText>-{formatDuration(Math.round(end))}</TinyText>
       </Box>
       <Box
         sx={{

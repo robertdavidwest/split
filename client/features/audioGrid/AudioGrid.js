@@ -1,48 +1,64 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid } from "@mui/material";
 import { Container } from "@mui/material";
 
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchSongSectionsAsync,
+  selectSong,
+  selectSongSections,
+} from "./audioGridSlice";
 import Audio from "../audio/Audio";
 import TrackHeader from "../trackHeader/TrackHeader";
 import AddNewPlayer from "../addNewPlayer/AddNewPlayer";
 
-export const AudioGrid = (props) => {
-  const song = {
-    audioUrl: "02 - Pride and Joy.mp3",
-    id: 1,
-    songName: "Pride & Joy",
-    artist: "Stevie Ray Vaughan",
-  };
+function createAudioElement() {
+  return document.createElement("audio");
+}
 
-  const audioElements = [
-    document.createElement("audio"),
-    document.createElement("audio"),
-    // document.createElement("audio"),
-    // document.createElement("audio"),
-  ];
+export const AudioGrid = (props) => {
+  // songId will be a prop
+  // hardcoded for now
+  const songId = 1;
+  ////////////////////////
+
+  const dispatch = useDispatch();
+  let song = useSelector(selectSong);
+  const sections = useSelector(selectSongSections);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(fetchSongSectionsAsync(songId));
+    };
+    fetchData();
+  }, [dispatch]);
+
+  function addNewPlayer() {
+    console.log("add new player to be built");
+    // audioElements.push(document.createElement("audio"));
+  }
 
   return (
     <Container>
       <Grid container columns={1} rowSpacing={2}>
         <Grid item md={1}>
-          <TrackHeader
-            mp3Filename={song.audioUrl}
-            dftSongName={song.songName}
-            dftArtist={song.artist}
-          />
+          <TrackHeader song={song} />
         </Grid>
 
         <Grid item md={1}>
           <Grid container spacing={2} columns={2} rowSpacing={2}>
-            {audioElements.map((audio, i) => (
+            {sections.map((section, i) => (
               <Grid key={i} item sm={2} md={1}>
-                {i === 1 ? (
-                  <AddNewPlayer />
-                ) : (
-                  <Audio song={song} label={`Section ${i + 1}`} audio={audio} />
-                )}
+                <Audio
+                  song={song}
+                  section={section}
+                  audio={createAudioElement()}
+                />
               </Grid>
             ))}
+            <Grid item sm={2} md={1}>
+              <AddNewPlayer addNewPlayer={addNewPlayer} />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

@@ -4,9 +4,14 @@ import { TextField } from "@mui/material";
 
 import { HeaderWidget } from "../widget/Widget";
 
-export default function TrackHeader({ mp3Filename, dftSongName, dftArtist }) {
-  const [songName, setSongName] = React.useState(dftSongName);
-  const [artist, setArtist] = React.useState(dftArtist);
+export default function TrackHeader({ song }) {
+  const [songName, setSongName] = React.useState("");
+  const [artist, setArtist] = React.useState("");
+
+  React.useEffect(() => {
+    if (song.name) setSongName(song.name);
+    if (song.artist) setArtist(song.artist);
+  }, [song]);
 
   return (
     <HeaderWidget>
@@ -25,7 +30,7 @@ export default function TrackHeader({ mp3Filename, dftSongName, dftArtist }) {
         onChange={(e) => setArtist(e.target.value)}
       />
       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-        {mp3Filename}
+        {song.audioUrl}
       </Typography>
     </HeaderWidget>
   );

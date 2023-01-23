@@ -3,9 +3,9 @@ const db = require("../db");
 
 const Section = db.define("section", {
   label: Sequelize.STRING,
-  start: Sequelize.DECIMAL,
-  end: Sequelize.DECIMAL,
-  playBackRate: Sequelize.FLOAT,
+  start: Sequelize.FLOAT,
+  end: Sequelize.FLOAT,
+  playbackRate: Sequelize.FLOAT,
   loop: Sequelize.BOOLEAN,
 });
 
