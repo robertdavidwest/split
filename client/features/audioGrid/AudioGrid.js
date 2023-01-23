@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchSongSectionsAsync,
   createSectionAsync,
+  deleteSectionAsync,
   createSection,
+  deleteSection,
   selectSong,
   selectSongSections,
 } from "./audioGridSlice";
@@ -35,7 +37,7 @@ export const AudioGrid = (props) => {
     fetchData();
   }, [dispatch]);
 
-  function addNewPlayer() {
+  async function addNewPlayer() {
     const nextSectionNum = sections.length + 1;
     const payload = {
       songId,
@@ -45,10 +47,18 @@ export const AudioGrid = (props) => {
       playbackRate: 1.0,
       loop: false,
     };
-    dispatch(createSectionAsync(payload));
+    await dispatch(createSectionAsync(payload));
+    payload["inMemoryId"] = sections.length;
+    console.log(payload.inMemoryId);
     dispatch(createSection(payload));
   }
 
+  async function deletePlayer(sectionId, inMemoryId) {
+    sectionId = Number(sectionId);
+    inMemoryId = Number(inMemoryId);
+    if (sectionId) await dispatch(deleteSectionAsync(sectionId));
+    dispatch(deleteSection(inMemoryId));
+  }
   return (
     <Container>
       <Grid container columns={1} rowSpacing={2}>
@@ -64,6 +74,7 @@ export const AudioGrid = (props) => {
                   song={song}
                   section={section}
                   audio={createAudioElement()}
+                  deletePlayer={deletePlayer}
                 />
               </Grid>
             ))}

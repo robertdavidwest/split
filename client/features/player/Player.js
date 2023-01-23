@@ -8,6 +8,7 @@ import Stack from "@mui/material/Stack";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import LoopIcon from "@mui/icons-material/Loop";
+import DeleteIcon from "@mui/icons-material/Delete";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SlowMotionVideoIcon from "@mui/icons-material/SlowMotionVideo";
 import { TextField } from "@mui/material";
@@ -24,6 +25,8 @@ const TinyText = styled(Typography)({
 });
 
 export default function Player({
+  sectionId,
+  inMemoryId,
   label,
   start,
   setStart,
@@ -39,6 +42,7 @@ export default function Player({
   setPlayback,
   playbackRate,
   setAudioPlaybackRate,
+  deletePlayer,
 }) {
   const setPlaybackManually = (value) => {
     setPlayback(value);
@@ -163,6 +167,13 @@ export default function Player({
 
   return (
     <Widget>
+      <IconButton
+        aria-label="delete"
+        size="large"
+        onClick={() => deletePlayer(sectionId, inMemoryId)}
+      >
+        <DeleteIcon fontSize="inherit" />
+      </IconButton>
       <TextField
         size="small"
         label="Section"

@@ -25,6 +25,18 @@ export const createSectionAsync = createAsyncThunk(
   }
 );
 
+export const deleteSectionAsync = createAsyncThunk(
+  "deleteSection",
+  async (sectionId) => {
+    try {
+      const { data } = await axios.delete(`api/sections/${sectionId}`);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const audioGridSlice = createSlice({
   name: "audioGrid",
   initialState: { song: {}, sections: [] },
@@ -32,11 +44,20 @@ export const audioGridSlice = createSlice({
     createSection(state, action) {
       state.sections.push(action.payload);
     },
+    deleteSection(state, action) {
+      const inMemoryId = action.payload;
+      state.sections = state.sections.filter(
+        (x) => x.inMemoryId !== inMemoryId
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchSongSectionsAsync.fulfilled, (state, action) => {
       const { sections, ...rest } = action.payload;
-      state.sections = sections;
+      state.sections = sections.map((x, i) => {
+        x["inMemoryId"] = i;
+        return x;
+      });
       state.song = rest;
     });
   },
@@ -50,5 +71,5 @@ export const selectSongSections = (state) => {
   return state.audioGrid.sections;
 };
 
-export const { createSection } = audioGridSlice.actions;
+export const { createSection, deleteSection } = audioGridSlice.actions;
 export default audioGridSlice.reducer;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Player from "../player/Player";
 
-const Audio = ({ song, section, audio }) => {
+const Audio = ({ song, section, audio, deletePlayer }) => {
   const [loaded, setLoaded] = useState(false);
   const [duration, setDuration] = useState(0);
   const [start, setStart] = useState(0);
@@ -105,9 +105,15 @@ const Audio = ({ song, section, audio }) => {
     setAudioPlaybackRate(section.playbackRate);
   }, [song, section]);
 
+  const sectionId = section.id;
+  const inMemoryId = section.inMemoryId;
+  const label = section.label;
+
   return (
     <Player
-      label={section.label}
+      sectionId={sectionId}
+      inMemoryId={inMemoryId}
+      label={label}
       restart={startSong}
       start={start}
       setStart={setStart}
@@ -122,6 +128,7 @@ const Audio = ({ song, section, audio }) => {
       setPlayback={setPlayback}
       playbackRate={playbackRate}
       setAudioPlaybackRate={setAudioPlaybackRate}
+      deletePlayer={deletePlayer}
     />
   );
 };

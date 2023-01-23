@@ -22,7 +22,7 @@ router.get("/:songId", async (req, res, next) => {
       include: [
         {
           model: Section,
-          attributes: ["label", "start", "end", "playbackRate", "loop"],
+          attributes: ["id", "label", "start", "end", "playbackRate", "loop"],
         },
       ],
     });
